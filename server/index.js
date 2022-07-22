@@ -1,10 +1,12 @@
 const express = require("express");
 const secure = require("express-force-https");
 const prerender = require("prerender-node");
+const fs = require("fs");
 
 // Load from env vars
-const port = process.env.PORT;
-const indexHtml = process.env.INDEX_HTML;
+const originalHtml = fs.readFileSync("build/index.html", "utf8");
+
+const indexHtml = "build/index.html";
 
 const app = express();
 
@@ -16,7 +18,10 @@ app.use(prerender.set("prerenderToken", "c1OgGjqkie9EDmEFTCxC"));
 
 // Serve index.html on every url.
 app.get("*", (req, res) => {
-  res.send(indexHtml);
+  console.log("indexHtml", originalHtml);
+  res.send(originalHtml);
 });
 
-app.listen(port);
+app.listen(3000, () => {
+  console.log("Server start on 3000");
+});
